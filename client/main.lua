@@ -9,7 +9,7 @@ local  notificationDistance = 3
 
 RegisterNetEvent("smell:set")
 AddEventHandler("smell:set", function(smell)
-  TriggerEvent('chatMessage', "System", {200,0,0} , "Smell Set!")
+  TriggerEvent('chatMessage', "SMELL", {200,0,0} , "Smell Set!")
   currentSmell = smell
   notifiedPlayers = {}
 end)
@@ -17,21 +17,21 @@ end)
 RegisterNetEvent("smell:get")
 AddEventHandler("smell:get", function(test)
   if currentSmell == nil then
-    TriggerEvent('chatMessage', "System", {200,0,0} , "You have no smell set for your character.")
+    TriggerEvent('chatMessage', "SMELL", {200,0,0} , "You have no smell set for your character.")
   else
-    TriggerEvent('chatMessage', "System", {200,0,0} , "You smell like " .. currentSmell)
+    TriggerEvent('chatMessage', "SMELL", {200,0,0} , "You smell like " .. currentSmell)
   end
 end)
 
 RegisterNetEvent("smell:notify")
 AddEventHandler("smell:notify", function(smell)
-  TriggerEvent('chatMessage', "System", {200,0,0} , "You notice the smell of " .. smell .. " on a nearby player.")
+  TriggerEvent('chatMessage', "SMELL", {200,0,0} , "You notice the smell of " .. smell .. " on a nearby player.")
 end)
 
 RegisterNetEvent("smell:clear")
 AddEventHandler("smell:clear", function()
   currentSmell = nil
-  TriggerEvent('chatMessage', "System", {200,0,0} , "Your smell has been removed")
+  TriggerEvent('chatMessage', "SMELL", {200,0,0} , "Your smell has been removed")
 end)
 
 
