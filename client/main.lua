@@ -17,7 +17,7 @@ end)
 RegisterNetEvent("smell:get")
 AddEventHandler("smell:get", function(test)
   if currentSmell == nil then
-    TriggerEvent('chatMessage', "System", {200,0,0} , "You have no smell")
+    TriggerEvent('chatMessage', "System", {200,0,0} , "You have no smell set for your character.")
   else
     TriggerEvent('chatMessage', "System", {200,0,0} , "You smell like " .. currentSmell)
   end

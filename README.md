@@ -26,7 +26,7 @@ This resource makes the following commands available:
 
 # How it Works
 
-It works by finding the players within range of the current player and triggers a notification that states "You notice a smell of [smell] on a nearby player". If you wish to edit this you can do so in the ./client/main.lua file
+It works by finding the players within range of the current player and triggers a notification that states "You notice the smell of [smell] on a nearby player". If you wish to edit this you can do so in the ./client/main.lua file
 Once a player has been notified they will only be sent that notification once. If the player changes their smell to something else they will receive the notification again.
 
 # Forking and Contributing
