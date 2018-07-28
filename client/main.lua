@@ -1,5 +1,11 @@
+-- The current smell associated with the playre
 local currentSmell = nil
+
+-- A table of players already notified for the current smell
 local notifiedPlayers = {}
+
+-- The distance to with the smell:notify event will occur
+local  notificationDistance = 3
 
 RegisterNetEvent("smell:set")
 AddEventHandler("smell:set", function(smell)
@@ -31,11 +37,11 @@ end)
 
 Citizen.CreateThread(function()
   while true do
-    local closestPlayerHandle, distance = GetClosestPlayer()
+    local players = GetNearbyPlayers(notificationDistance)
 
-    if closestPlayerHandle ~= nil or closestPlayerHandle ~= -1 then
+    for index,player in ipairs(players) do
 
-      local playerId = GetPlayerServerId(closestPlayerHandle)
+      local playerId = GetPlayerServerId(player)
 
       if has_value(notifiedPlayers, playerId) then
         playerHasNotBeenNotified = false
@@ -43,13 +49,13 @@ Citizen.CreateThread(function()
         playerHasNotBeenNotified = true
       end
 
-      if shouldNotifyPlayer(distance, currentSmell, closestPlayerHandle) and playerHasNotBeenNotified then
+      if shouldNotifyPlayer(currentSmell, player) and playerHasNotBeenNotified then
         TriggerServerEvent('smell:notifyPlayer', playerId, currentSmell)
         table.insert(notifiedPlayers, playerId)
       end
     end
 
-    Citizen.Wait(1000)
+    Citizen.Wait(5000)
   end
 end)
 
@@ -58,8 +64,6 @@ end)
   smell status
 
   Params
-    distance
-    integer distance from the player
   currentSmell
     string (or nil) the players current smell
   playerId
@@ -69,13 +73,12 @@ end)
 
   This method will return true if any of the following conditions exist
      The player has a current smell AND
-     The distance is less than the value defined (defaults to 3) AND
      (
        Both the currentPlayer and the closestPlayer are not in their vehicles OR
-       The current player is in their vehicle and the cloestPlayer is not
+       The current player is in their vehicle and the closestPlayer is not
      )
 ]]
-function shouldNotifyPlayer(distance, currentSmell, playerId)
+function shouldNotifyPlayer(currentSmell, playerId)
   if currentSmell == nil then
     return false
   end
@@ -94,13 +97,7 @@ function shouldNotifyPlayer(distance, currentSmell, playerId)
     isPlayerInVehicle = false
   end
 
-  if distance < 3 then
-    distanceMet = true
-  else
-    distanceMet = false
-  end
-
-  if closestPlayerInVehicle == false and isPlayerInVehicle == false and distanceMet then
+  if closestPlayerInVehicle == false and isPlayerInVehicle == false then
     return true
   end
 
@@ -112,35 +109,31 @@ function shouldNotifyPlayer(distance, currentSmell, playerId)
 end
 
 --[[
-  Determines which player connected to the server is closest to the
+  Determines which players connected to the server are within range of the
   current player
 
   Returns
-    closestPlayer
-    integer ID of the player
-  distance
-    float distance from current player
+    returnablePlayers
+      table - list of player ids within the distance of the player
 ]]
-function GetClosestPlayer()
+function GetNearbyPlayers(distance)
   local players = GetPlayers()
-  local closestDistance = -1
-  local closestPlayer = -1
   local ply = GetPlayerPed(-1)
   local plyCoords = GetEntityCoords(ply, 0)
+  local returnablePlayers = {}
 
   for index,value in ipairs(players) do
     local target = GetPlayerPed(value)
     if(target ~= ply) then
       local targetCoords = GetEntityCoords(GetPlayerPed(value), 0)
-      local distance = Vdist(targetCoords["x"], targetCoords["y"], targetCoords["z"], plyCoords["x"], plyCoords["y"], plyCoords["z"])
-      if(closestDistance == -1 or closestDistance > distance) then
-        closestPlayer = value
-        closestDistance = distance
+      local player_distance = Vdist(targetCoords["x"], targetCoords["y"], targetCoords["z"], plyCoords["x"], plyCoords["y"], plyCoords["z"])
+      if(distance > player_distance) then
+        table.insert(returnablePlayers, value)
       end
     end
   end
 
-  return closestPlayer, closestDistance
+  return returnablePlayers
 end
 
 --[[
