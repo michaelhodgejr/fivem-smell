@@ -8,7 +8,7 @@ Clone the repository into your server-data directroy
   git clone git@github.com:michaelhodgejr/fivem-smell.git
 ```
 
-Add the following to your server.cfg 
+Add the following to your server.cfg
 
 ```
   start fivem-smell
@@ -26,9 +26,9 @@ This resource makes the following commands available:
 
 # How it Works
 
-It works by finding the player closest to the current player and triggers a notification that states "You notice a smell of [smell] on a nearby player". If you wish to edit this you can do so in the ./client/main.lua file
-Once a player has been notified they will only be sent that notification once. If the player changes their smell to something else they will receive the notification again. 
+It works by finding the players within range of the current player and triggers a notification that states "You notice a smell of [smell] on a nearby player". If you wish to edit this you can do so in the ./client/main.lua file
+Once a player has been notified they will only be sent that notification once. If the player changes their smell to something else they will receive the notification again.
 
 # Forking and Contributing
 
-Feel free to fork the resource and to submit pull requests. 
+Feel free to fork the resource and to submit pull requests.
