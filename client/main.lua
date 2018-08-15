@@ -25,7 +25,9 @@ end)
 
 RegisterNetEvent("smell:notify")
 AddEventHandler("smell:notify", function(smell)
-  TriggerEvent('chatMessage', "SMELL", {200,0,0} , "You notice the smell of " .. smell .. " on a nearby player.")
+  SetNotificationTextEntry('STRING');
+  AddTextComponentString("You notice the smell of " .. smell .. " on a nearby player");
+  DrawNotification(false, true);
 end)
 
 RegisterNetEvent("smell:clear")
