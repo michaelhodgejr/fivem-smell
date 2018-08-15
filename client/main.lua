@@ -39,25 +39,27 @@ end)
 
 Citizen.CreateThread(function()
   while true do
-    local players = GetNearbyPlayers(notificationDistance)
+    if currentSmell ~= nil then
+      local players = GetNearbyPlayers(notificationDistance)
 
-    for index,player in ipairs(players) do
+      for index,player in ipairs(players) do
 
-      local playerId = GetPlayerServerId(player)
+        local playerId = GetPlayerServerId(player)
 
-      if has_value(notifiedPlayers, playerId) then
-        playerHasNotBeenNotified = false
-      else
-        playerHasNotBeenNotified = true
+        if has_value(notifiedPlayers, playerId) then
+          playerHasNotBeenNotified = false
+        else
+          playerHasNotBeenNotified = true
+        end
+
+        if shouldNotifyPlayer(currentSmell, player) and playerHasNotBeenNotified then
+          TriggerServerEvent('smell:notifyPlayer', playerId, currentSmell)
+          table.insert(notifiedPlayers, playerId)
+        end
       end
 
-      if shouldNotifyPlayer(currentSmell, player) and playerHasNotBeenNotified then
-        TriggerServerEvent('smell:notifyPlayer', playerId, currentSmell)
-        table.insert(notifiedPlayers, playerId)
-      end
+      Citizen.Wait(5000)
     end
-
-    Citizen.Wait(5000)
   end
 end)
 
