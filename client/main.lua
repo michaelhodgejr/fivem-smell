@@ -56,10 +56,9 @@ Citizen.CreateThread(function()
           TriggerServerEvent('smell:notifyPlayer', playerId, currentSmell)
           table.insert(notifiedPlayers, playerId)
         end
-      end
-
-      Citizen.Wait(5000)
+      end      
     end
+      Citizen.Wait(5000)
   end
 end)
 
